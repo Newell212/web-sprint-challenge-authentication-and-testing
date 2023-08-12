@@ -2,12 +2,13 @@ const router = require('express').Router();
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const User = require('./auth-model')
-const { restricted, checkUsernameExists } = require('../middleware/restricted')
+const { checkUsernameExists } = require('../middleware/restricted')
 
 const { BCRYPT_ROUNDS, JWT_SECRET } = require('../../config')
 
-router.post('/register', checkUsernameExists, (req, res, next) => {
+router.post('/register',  (req, res, next) => {
   let user = req.body
+  console.log(user)
 
   const hash = bcrypt.hashSync(user.password, BCRYPT_ROUNDS)
 
@@ -45,7 +46,7 @@ router.post('/register', checkUsernameExists, (req, res, next) => {
   */
 });
 
-router.post('/login', checkUsernameExists, restricted, (req, res, next) => {
+router.post('/login', checkUsernameExists, (req, res, next) => {
   let { username, password } = req.body
 
   User.findBy({ username })
