@@ -8,15 +8,22 @@ const { BCRYPT_ROUNDS, JWT_SECRET } = require('../../config')
 
 router.post('/register',  (req, res, next) => {
   let user = req.body
+  if(!user.username || !user.password) {
+    next({ status: 401, message: 'username and password required'})
+  } else if(User.findBy({username: user.username}) === user.username) {
+    console.log('im here')
+    next({ status: 401, message: 'username taken'})
+  } else {
+    const hash = bcrypt.hashSync(user.password, BCRYPT_ROUNDS)
+    user.password = hash
 
-  const hash = bcrypt.hashSync(user.password, BCRYPT_ROUNDS)
-  user.password = hash
-
-  User.add(user)
+    User.add(user)
     .then(saved => {
       res.status(201).json({ message: `Welcome new user ${saved.username}`})
     })
     .catch(next)
+  }
+  
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
