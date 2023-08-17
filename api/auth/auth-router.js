@@ -8,10 +8,8 @@ const { BCRYPT_ROUNDS, JWT_SECRET } = require('../../config')
 
 router.post('/register',  (req, res, next) => {
   let user = req.body
-  console.log(user)
 
   const hash = bcrypt.hashSync(user.password, BCRYPT_ROUNDS)
-
   user.password = hash
 
   User.add(user)
