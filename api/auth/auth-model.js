@@ -8,9 +8,14 @@ module.exports = {
 
 
 function findBy(filter) {
-    return db('users as u')
+    const user =  db('users as u')
     .select('u.id', 'u.username', 'u.password')
     .where(filter)
+    .first()
+    .then((value) => {
+        return value
+    })
+    return user
 }
 
 async function add(user) {

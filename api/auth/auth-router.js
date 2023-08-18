@@ -6,12 +6,12 @@ const { checkUsernameExists } = require('../middleware/restricted')
 
 const { BCRYPT_ROUNDS, JWT_SECRET } = require('../../config')
 
-router.post('/register',  (req, res, next) => {
+router.post('/register', async (req, res, next) => {
   let user = req.body
+  const existingUser = await User.findBy({username: user.username})
   if(!user.username || !user.password) {
     next({ status: 401, message: 'username and password required'})
-  } else if(User.findBy({username: user.username}) === user.username) {
-    console.log('im here')
+  } else if(existingUser.username === user.username) {
     next({ status: 401, message: 'username taken'})
   } else {
     const hash = bcrypt.hashSync(user.password, BCRYPT_ROUNDS)
