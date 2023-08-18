@@ -14,7 +14,6 @@ router.post('/register', async (req, res, next) => {
   } else if(existingUser && existingUser.username  === user.username) {
     next({ status: 401, message: 'username taken'})
   } else {
-    console.log('im here')
     const hash = bcrypt.hashSync(user.password, BCRYPT_ROUNDS)
     user.password = hash
 
@@ -56,7 +55,7 @@ router.post('/login', checkUsernameExists, (req, res, next) => {
   let { username, password } = req.body
 
   User.findBy({ username })
-    .then(([user]) => {
+    .then((user) => {
       if(user && bcrypt.compareSync(password, user.password)) {
         const token = buildToken(user)
         res.status(200).json({ message: `welcome, ${user.username}`, token})
