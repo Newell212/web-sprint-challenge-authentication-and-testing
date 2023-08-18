@@ -13,6 +13,7 @@ function findBy(filter) {
     .where(filter)
     .first()
     .then((value) => {
+    
         return value
     })
     return user

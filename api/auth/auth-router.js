@@ -11,9 +11,10 @@ router.post('/register', async (req, res, next) => {
   const existingUser = await User.findBy({username: user.username})
   if(!user.username || !user.password) {
     next({ status: 401, message: 'username and password required'})
-  } else if(existingUser.username === user.username) {
+  } else if(existingUser && existingUser.username  === user.username) {
     next({ status: 401, message: 'username taken'})
   } else {
+    console.log('im here')
     const hash = bcrypt.hashSync(user.password, BCRYPT_ROUNDS)
     user.password = hash
 

@@ -19,7 +19,7 @@ describe('[POST] /register', () => {
   })
   test('wont add user if username is not unique', async () => {
     const res = await request(server).post('/api/auth/register').send(newUser)
-    expect(res.status).toBe(500)
+    expect(res.status).toBe(401)
   })
 })
 
