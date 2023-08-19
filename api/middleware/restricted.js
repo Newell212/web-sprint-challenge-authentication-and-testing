@@ -15,7 +15,7 @@ const restricted = (req, res, next) => {
       }
     })
   } else {
-    next({ status: 401, message: "token invalid"})
+    next({ status: 401, message: "token required"})
   }
 }
 
@@ -24,7 +24,7 @@ const restricted = (req, res, next) => {
 
     if(!incomingUser || !incomingUser.username || !incomingUser.password) {
       console.log("username and password required")
-      return next({ status: 401, message: 'username and password required'})
+      return next({ status: 401, message: 'invalid credentials'})
     }
   
     try {

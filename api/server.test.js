@@ -17,7 +17,7 @@ describe('[POST] /register', () => {
     const res = await request(server).post('/api/auth/register').send({})
     expect(res.status).toBe(401)
   })
-  
+
   test('username required', async () => {
     const res = await request(server).post('/api/auth/register').send({password: '1234'})
     expect(res.status).toBe(401)
@@ -49,12 +49,16 @@ describe('[POST] /login', () => {
     token = res.body.token
     expect(token).toEqual(res.body.token)
   })
+  test('responds with invalid credentials if theres no username', async () => {
+    const res = await request(server).post('/api/auth/login').send({password: '1234'})
+    expect(res.body.message).toEqual('invalid credentials')
+  })
 })
 
 describe('[GET] /', () => {
   test('wont access jokes without token', async () => {
     const res = await request(server).get('/api/jokes')
-    expect(res.body.message).toEqual('token invalid')
+    expect(res.body.message).toEqual('token required')
   })
   test('will access jokes', async () => {
     const res = await request(server).get('/api/jokes').set({Authorization: token})
