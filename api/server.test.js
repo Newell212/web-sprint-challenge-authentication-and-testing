@@ -49,9 +49,9 @@ describe('[POST] /login', () => {
     token = res.body.token
     expect(token).toEqual(res.body.token)
   })
-  test('responds with invalid credentials if theres no username', async () => {
+  test('responds with correct message if theres no username', async () => {
     const res = await request(server).post('/api/auth/login').send({password: '1234'})
-    expect(res.body.message).toEqual('invalid credentials')
+    expect(res.body.message).toEqual('username and password required')
   })
 })
 

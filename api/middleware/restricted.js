@@ -30,7 +30,7 @@ const restricted = (req, res, next) => {
     try {
       const user = await findBy({ username: incomingUser.username})
       if(!user) {
-        next({ status: 401, message: 'username and password required' })
+        next({ status: 401, message: 'invalid credentials' })
       } else {
         req.user = user
         next()
