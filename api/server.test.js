@@ -1,8 +1,6 @@
 const request = require('supertest')
-// const bcrypt = require('bcryptjs')
 const db = require('../data/dbConfig')
 const server = require('./server')
-// const { BCRYPT_ROUNDS } = require('../config')
 
 let token = ""
 
@@ -14,12 +12,25 @@ beforeAll(async () => {
 
 describe('[POST] /register', () => {
   const newUser = {username: 'napoleon', password: '1234'}
-  // const encryptedPassword = bcrypt.hashSync(newUser.password, BCRYPT_ROUNDS);
+
+  test('empty user is an error', async () => {
+    const res = await request(server).post('/api/auth/register').send({})
+    expect(res.status).toBe(401)
+  })
+  
+  test('username required', async () => {
+    const res = await request(server).post('/api/auth/register').send({password: '1234'})
+    expect(res.status).toBe(401)
+  })
+
+  test('password required', async () => {
+    const res = await request(server).post('/api/auth/register').send({username: '1234'})
+    expect(res.status).toBe(401)
+  })
 
   test('adds new user to the database', async () => {
     const res = await request(server).post('/api/auth/register').send(newUser)
     expect(res.status).toBe(201)
-    // expect(res.body.password).toBe(encryptedPassword);
   })
 
   test('wont add user if username is not unique', async () => {

@@ -12,12 +12,7 @@ function findBy(filter) {
     .select('u.id', 'u.username', 'u.password')
     .where(filter)
     .first()
-    .then((value) => {
-        if(value === null) {
-            return ''
-        }
-        return value
-    })
+    .then((value) => value)
     return user
 }
 
