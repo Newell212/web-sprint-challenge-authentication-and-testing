@@ -13,7 +13,9 @@ function findBy(filter) {
     .where(filter)
     .first()
     .then((value) => {
-    
+        if(value === null) {
+            return ''
+        }
         return value
     })
     return user

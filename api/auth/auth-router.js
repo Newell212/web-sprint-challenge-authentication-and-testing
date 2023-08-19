@@ -9,7 +9,8 @@ const { BCRYPT_ROUNDS, JWT_SECRET } = require('../../config')
 router.post('/register', async (req, res, next) => {
   let user = req.body
   const existingUser = await User.findBy({username: user.username})
-  if(!user.username || !user.password) {
+  console.log(existingUser)
+  if(!user.username || !user.password || !user) {
     next({ status: 401, message: 'username and password required'})
   } else if(existingUser && existingUser.username  === user.username) {
     next({ status: 401, message: 'username taken'})
@@ -19,7 +20,7 @@ router.post('/register', async (req, res, next) => {
 
     User.add(user)
     .then(saved => {
-      res.status(201).json({ message: `Welcome new user ${saved.username}`})
+      res.status(201).json(saved)
     })
     .catch(next)
   }
