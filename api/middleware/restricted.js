@@ -8,7 +8,7 @@ const restricted = (req, res, next) => {
   if(token) {
     jwt.verify(token, JWT_SECRET, (err, decoded) => {
       if(err) {
-        next({ status: 401, message: "token required"})
+        next({ status: 401, message: "token invalid"})
       } else {
         req.decodedJwt = decoded
         next()
@@ -24,8 +24,8 @@ const restricted = (req, res, next) => {
 
     if(!incomingUser || !incomingUser.username || !incomingUser.password) {
       console.log("username and password required")
-      return next({ status: 401, message: 'invalid credentials'})
-    }
+      return next({ status: 401, message: 'username and password required'})
+    } 
   
     try {
       const user = await findBy({ username: incomingUser.username})
